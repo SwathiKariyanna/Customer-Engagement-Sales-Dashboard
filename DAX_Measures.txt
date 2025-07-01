@@ -1,0 +1,29 @@
+-- Unique Active Users Per Day
+UniqueActiveUsers = DISTINCTCOUNT('UserActivity'[UserID])
+
+-- Average Session Duration (in minutes)
+AverageSessionDuration = AVERAGE('UserActivity'[SessionDuration])
+
+-- Cart Abandonment Rate (%)
+CartAbandonmentRate = 
+DIVIDE(
+    CALCULATE(COUNTROWS('Transactions'), 'Transactions'[Status] = "Abandoned"),
+    CALCULATE(COUNTROWS('Transactions')),
+    0
+) * 100
+
+-- Total Product Views
+TotalProductViews = SUM('UserActivity'[ProductViews])
+
+-- Completed Checkouts
+CompletedCheckouts = CALCULATE(COUNTROWS('Transactions'), 'Transactions'[Status] = "Completed")
+
+-- Daily Active Users Trend
+DailyActiveUsers = 
+CALCULATE(
+    DISTINCTCOUNT('UserActivity'[UserID]),
+    FILTER(
+        'UserActivity',
+        'UserActivity'[Date] = MAX('UserActivity'[Date])
+    )
+)
